@@ -5,6 +5,10 @@ import { Part2CategoryView } from "@/components/topics/TopicViews";
 import { categoryBySlug, part2Categories } from "@/content";
 import { Badge } from "@/components/ui/primitives";
 
+/** Only slugs produced by generateStaticParams exist: unknown URLs return a real 404,
+ *  and the content ships with the build rather than being rendered on demand. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return part2Categories.map((category) => ({ category: category.slug }));
 }

@@ -6,6 +6,10 @@ import { lessonsForTrack, trackById, tracks } from "@/content";
 import { Badge, Panel } from "@/components/ui/primitives";
 import { LEVEL_LABELS } from "@/lib/utils";
 
+/** Only slugs produced by generateStaticParams exist: unknown URLs return a real 404,
+ *  and the content ships with the build rather than being rendered on demand. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return tracks.map((track) => ({ track: track.id }));
 }

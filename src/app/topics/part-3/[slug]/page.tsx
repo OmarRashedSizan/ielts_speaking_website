@@ -5,6 +5,10 @@ import { Part3TypeView } from "@/components/topics/TopicViews";
 import { part3Types, questionTypeBySlug } from "@/content";
 import { Badge } from "@/components/ui/primitives";
 
+/** Only slugs produced by generateStaticParams exist: unknown URLs return a real 404,
+ *  and the content ships with the build rather than being rendered on demand. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return part3Types.map((type) => ({ slug: type.slug }));
 }

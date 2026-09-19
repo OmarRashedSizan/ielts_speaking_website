@@ -5,6 +5,10 @@ import LessonBlocks from "@/components/lesson/Blocks";
 import { resourceBySlug, resources } from "@/content";
 import { Badge } from "@/components/ui/primitives";
 
+/** Only slugs produced by generateStaticParams exist: unknown URLs return a real 404,
+ *  and the content ships with the build rather than being rendered on demand. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return resources.map((resource) => ({ slug: resource.slug }));
 }

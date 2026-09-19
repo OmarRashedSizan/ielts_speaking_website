@@ -8,6 +8,10 @@ import { MarkComplete, PracticePrompts } from "@/components/lesson/LessonActions
 import { lessonByRef, lessons, lessonNeighbours, trackById } from "@/content";
 import { Panel } from "@/components/ui/primitives";
 
+/** Only slugs produced by generateStaticParams exist: unknown URLs return a real 404,
+ *  and the content ships with the build rather than being rendered on demand. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return lessons.map((lesson) => ({ track: lesson.track, lesson: lesson.slug }));
 }
