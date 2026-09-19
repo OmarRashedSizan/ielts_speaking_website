@@ -1,0 +1,465 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Bolte Shikhi — design tokens
+   Editorial-academic system: warm paper canvas, ink text, deep green brand,
+   ochre accent. No gradients-as-decoration, no glassmorphism, no neon.
+   ========================================================================== */
+
+@theme {
+  /* Webfonts are loaded with a <link> in layout.tsx, so the build never needs
+     network access and every stack degrades to a good system font. */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Noto Sans Bengali", "Hind Siliguri", sans-serif;
+  --font-serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman",
+    serif;
+  --font-bangla: "Noto Sans Bengali", "Hind Siliguri", "SolaimanLipi",
+    "Nirmala UI", var(--font-sans);
+
+  /* Surfaces */
+  --color-canvas: #f7f6f2;
+  --color-canvas-deep: #efede6;
+  --color-paper: #ffffff;
+
+  /* Ink */
+  --color-ink: #15212a;
+  --color-ink-soft: #3f4e59;
+  --color-ink-muted: #6b7a7f;
+  --color-line: #e3dfd5;
+  --color-line-strong: #cec8b9;
+
+  /* Brand — deep exam-hall green */
+  --color-brand-50: #eef5f1;
+  --color-brand-100: #d9e9e1;
+  --color-brand-200: #b2d3c4;
+  --color-brand-300: #83b6a1;
+  --color-brand-400: #4f947b;
+  --color-brand-500: #2c7a60;
+  --color-brand-600: #1d624d;
+  --color-brand-700: #174d3d;
+  --color-brand-800: #123a2f;
+  --color-brand-900: #0e2c24;
+
+  /* Accent — ochre */
+  --color-accent-50: #fbf4e8;
+  --color-accent-100: #f6e6cd;
+  --color-accent-200: #eccb97;
+  --color-accent-300: #dfae62;
+  --color-accent-400: #cb8f33;
+  --color-accent-500: #ac731f;
+  --color-accent-600: #8a5a15;
+  --color-accent-700: #6b4512;
+
+  /* Feedback */
+  --color-danger-50: #fbf0ee;
+  --color-danger-100: #f5dad5;
+  --color-danger-300: #d9988c;
+  --color-danger-500: #b34a37;
+  --color-danger-700: #7d3024;
+  --color-info-50: #eef2f8;
+  --color-info-100: #dbe4f1;
+  --color-info-500: #3f5f92;
+  --color-info-700: #2d4468;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-raise: 0 1px 2px rgba(21, 33, 42, 0.05),
+    0 6px 18px -12px rgba(21, 33, 42, 0.22);
+  --shadow-pop: 0 10px 40px -18px rgba(21, 33, 42, 0.35);
+
+  --text-micro: 0.6875rem;
+  --text-lead: 1.0625rem;
+}
+
+/* --- @theme end --- */
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.011em;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.85rem);
+  }
+  h2 {
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.95rem);
+  }
+  h3 {
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.35rem);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--color-accent-200);
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* --- Layout ------------------------------------------------------------ */
+  .shell {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.125rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+  .shell-narrow {
+    width: 100%;
+    max-width: 47rem;
+    margin-inline: auto;
+    padding-inline: 1.125rem;
+  }
+  @media (min-width: 768px) {
+    .shell-narrow {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* --- Editorial labels -------------------------------------------------- */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-micro);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .eyebrow-brand {
+    color: var(--color-brand-600);
+  }
+  .rule {
+    height: 1px;
+    background: var(--color-line);
+  }
+
+  /* --- Surfaces ---------------------------------------------------------- */
+  .card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+  .card-flat {
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+  .card-interactive {
+    transition: border-color 140ms ease, box-shadow 140ms ease,
+      transform 140ms ease;
+  }
+  .card-interactive:hover {
+    border-color: var(--color-line-strong);
+    box-shadow: var(--shadow-raise);
+    transform: translateY(-1px);
+  }
+  .tint-paper {
+    background: var(--color-paper);
+  }
+  .tint-wash {
+    background: var(--color-canvas-deep);
+  }
+
+  /* --- Buttons ----------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 550;
+    line-height: 1;
+    padding: 0.78rem 1.15rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: background-color 140ms ease, color 140ms ease,
+      border-color 140ms ease;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn-primary {
+    background: var(--color-brand-700);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-brand-800);
+  }
+  .btn-secondary {
+    background: var(--color-paper);
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .btn-secondary:hover {
+    background: var(--color-canvas-deep);
+  }
+  .btn-ghost {
+    color: var(--color-brand-700);
+    padding-inline: 0.5rem;
+  }
+  .btn-ghost:hover {
+    background: var(--color-brand-50);
+  }
+  .btn-sm {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* --- Tags -------------------------------------------------------------- */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 550;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+  .tag-brand {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-100);
+    color: var(--color-brand-700);
+  }
+  .tag-accent {
+    background: var(--color-accent-50);
+    border-color: var(--color-accent-100);
+    color: var(--color-accent-700);
+  }
+  .tag-danger {
+    background: var(--color-danger-50);
+    border-color: var(--color-danger-100);
+    color: var(--color-danger-700);
+  }
+
+  /* --- Lesson prose ------------------------------------------------------ */
+  .prose-lesson p {
+    color: var(--color-ink-soft);
+    margin-block: 0.7rem;
+    line-height: 1.72;
+  }
+  .prose-lesson strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .prose-lesson ul {
+    margin-block: 0.7rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    color: var(--color-ink-soft);
+  }
+  .prose-lesson li {
+    margin-block: 0.35rem;
+    line-height: 1.65;
+  }
+  .prose-lesson li::marker {
+    color: var(--color-brand-400);
+  }
+
+  /* --- Bangla ------------------------------------------------------------ */
+  .bn {
+    font-family: var(--font-bangla);
+    line-height: 1.85;
+    font-size: 1.02em;
+  }
+  .bn-block {
+    font-family: var(--font-bangla);
+    line-height: 1.9;
+    color: var(--color-ink-soft);
+  }
+
+  /* --- Answer echo (English example blocks) ------------------------------ */
+  .answer-block {
+    border-left: 3px solid var(--color-brand-300);
+    background: var(--color-brand-50);
+    padding: 0.85rem 1rem;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--color-ink);
+    line-height: 1.7;
+  }
+  .answer-block-weak {
+    border-left-color: var(--color-danger-300);
+    background: var(--color-danger-50);
+  }
+  .answer-block-accent {
+    border-left-color: var(--color-accent-300);
+    background: var(--color-accent-50);
+  }
+
+  .mono-chip {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    font-size: 0.82rem;
+    background: var(--color-canvas-deep);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xs);
+    padding: 0.08rem 0.35rem;
+  }
+
+  /* --- Progress ---------------------------------------------------------- */
+  .meter {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-canvas-deep);
+    overflow: hidden;
+  }
+  .meter > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+    transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* --- Patterns / tables ------------------------------------------------- */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .data-table th {
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: var(--text-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--color-line-strong);
+    vertical-align: bottom;
+  }
+  .data-table td {
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink-soft);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* --- Utility ----------------------------------------------------------- */
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    z-index: 100;
+    background: var(--color-brand-700);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: 0 0 var(--radius-md) 0;
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .grid-paper {
+    background-image: linear-gradient(
+        to right,
+        rgba(21, 33, 42, 0.045) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(21, 33, 42, 0.045) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: fade-rise 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}

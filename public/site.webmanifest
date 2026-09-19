@@ -1,0 +1,20 @@
+{
+  "name": "Bolte Shikhi — IELTS Speaking for Bangladeshi Learners",
+  "short_name": "Bolte Shikhi",
+  "description": "Build IELTS Speaking skills for Band 6.0–6.5. Learn how to build answers instead of memorising them.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#174d3d",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
