@@ -119,67 +119,123 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     [state.completedLessons],
   );
 
+  // ---- stable action functions (fixes infinite-loop bug) -------------------
+  const toggleLessonComplete = useCallback(
+    (track: string, slug: string) =>
+      update((draft) => {
+        const ref = lessonRef(track, slug);
+        const has = draft.completedLessons.includes(ref);
+        return {
+          ...draft,
+          completedLessons: has
+            ? draft.completedLessons.filter((r) => r !== ref)
+            : [...draft.completedLessons, ref],
+        };
+      }),
+    [update],
+  );
+
+  const registerVisit = useCallback(
+    (track: string, slug: string) =>
+      update((draft) => {
+        const ref = lessonRef(track, slug);
+        return { ...draft, visits: { ...draft.visits, [ref]: (draft.visits[ref] ?? 0) + 1 } };
+      }),
+    [update],
+  );
+
+  const recordPractice = useCallback(
+    (entry: Omit<PracticeEntry, "id" | "at">) =>
+      update((draft) => ({
+        ...draft,
+        practice: [{ ...entry, id: makeId(), at: new Date().toISOString() }, ...draft.practice].slice(
+          0,
+          400,
+        ),
+      })),
+    [update],
+  );
+
+  const recordMock = useCallback(
+    (entry: Omit<MockEntry, "id" | "at">) =>
+      update((draft) => ({
+        ...draft,
+        mocks: [{ ...entry, id: makeId(), at: new Date().toISOString() }, ...draft.mocks].slice(0, 60),
+      })),
+    [update],
+  );
+
+  const toggleSavedCueCard = useCallback(
+    (id: string) =>
+      update((draft) => ({
+        ...draft,
+        savedCueCards: draft.savedCueCards.includes(id)
+          ? draft.savedCueCards.filter((x) => x !== id)
+          : [...draft.savedCueCards, id],
+      })),
+    [update],
+  );
+
+  const toggleSavedQuestion = useCallback(
+    (id: string) =>
+      update((draft) => ({
+        ...draft,
+        savedQuestions: draft.savedQuestions.includes(id)
+          ? draft.savedQuestions.filter((x) => x !== id)
+          : [...draft.savedQuestions, id],
+      })),
+    [update],
+  );
+
+  const toggleMistakeMastered = useCallback(
+    (id: string) =>
+      update((draft) => ({
+        ...draft,
+        masteredMistakes: draft.masteredMistakes.includes(id)
+          ? draft.masteredMistakes.filter((x) => x !== id)
+          : [...draft.masteredMistakes, id],
+      })),
+    [update],
+  );
+
+  const savePrepNote = useCallback(
+    (id: string, note: string) =>
+      update((draft) => ({ ...draft, prepNotes: { ...draft.prepNotes, [id]: note } })),
+    [update],
+  );
+
+  const reset = useCallback(() => setState(EMPTY_PROGRESS), []);
+
   const value = useMemo<ProgressContextValue>(
     () => ({
       state,
       hydrated,
       streak: computeStreak(state.streakDays),
       isLessonComplete,
-      toggleLessonComplete: (track, slug) =>
-        update((draft) => {
-          const ref = lessonRef(track, slug);
-          const has = draft.completedLessons.includes(ref);
-          return {
-            ...draft,
-            completedLessons: has
-              ? draft.completedLessons.filter((r) => r !== ref)
-              : [...draft.completedLessons, ref],
-          };
-        }),
-      registerVisit: (track, slug) =>
-        update((draft) => {
-          const ref = lessonRef(track, slug);
-          return { ...draft, visits: { ...draft.visits, [ref]: (draft.visits[ref] ?? 0) + 1 } };
-        }),
-      recordPractice: (entry) =>
-        update((draft) => ({
-          ...draft,
-          practice: [{ ...entry, id: makeId(), at: new Date().toISOString() }, ...draft.practice].slice(
-            0,
-            400,
-          ),
-        })),
-      recordMock: (entry) =>
-        update((draft) => ({
-          ...draft,
-          mocks: [{ ...entry, id: makeId(), at: new Date().toISOString() }, ...draft.mocks].slice(0, 60),
-        })),
-      toggleSavedCueCard: (id) =>
-        update((draft) => ({
-          ...draft,
-          savedCueCards: draft.savedCueCards.includes(id)
-            ? draft.savedCueCards.filter((x) => x !== id)
-            : [...draft.savedCueCards, id],
-        })),
-      toggleSavedQuestion: (id) =>
-        update((draft) => ({
-          ...draft,
-          savedQuestions: draft.savedQuestions.includes(id)
-            ? draft.savedQuestions.filter((x) => x !== id)
-            : [...draft.savedQuestions, id],
-        })),
-      toggleMistakeMastered: (id) =>
-        update((draft) => ({
-          ...draft,
-          masteredMistakes: draft.masteredMistakes.includes(id)
-            ? draft.masteredMistakes.filter((x) => x !== id)
-            : [...draft.masteredMistakes, id],
-        })),
-      savePrepNote: (id, note) =>
-        update((draft) => ({ ...draft, prepNotes: { ...draft.prepNotes, [id]: note } })),
-      reset: () => setState(EMPTY_PROGRESS),
+      toggleLessonComplete,
+      registerVisit,
+      recordPractice,
+      recordMock,
+      toggleSavedCueCard,
+      toggleSavedQuestion,
+      toggleMistakeMastered,
+      savePrepNote,
+      reset,
     }),
-    [state, hydrated, isLessonComplete, update],
+    [
+      state,
+      hydrated,
+      isLessonComplete,
+      toggleLessonComplete,
+      registerVisit,
+      recordPractice,
+      recordMock,
+      toggleSavedCueCard,
+      toggleSavedQuestion,
+      toggleMistakeMastered,
+      savePrepNote,
+      reset,
+    ],
   );
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
